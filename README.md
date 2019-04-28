@@ -10,6 +10,10 @@ Specifically, this package returns the estimated pose of a car 1 second in the f
 * a set of waypoints that represents the general path that the car is expected to take around the race track map
 
 ![two cars in hallway](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/L1000398.jpg "Two F1/10 cars in the Levine 2nd floor hallway outside the mLab")
+In the image above, notice that there are 2 F1/10 cars. The car behind with the Logitech C910 usb webcam is the car that is running this ROS package. The car in front has an AprilTag of width 10.85cm mounted on its rear.
+
+![close-up on Logitech C910 webcam](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/L1000409.jpg "A close-up on the Logitech C910 webcam")
+This is a close-up image of the Logitech C910 USB webcam. Although the webcam supports up to 1920x1080 resolution at 30Hz natively, from my tests the highest usable resolution is 640x480 which the apriltag_ros package can process at around 10-12 Hz. A higher resolution such as 1280x720 is unusable for our purposes of near future pose estimation because the apriltag_ros package can only process 720p images at around 4Hz. For 1080p images, the speed is even slower, at around 1-2Hz.
 
 # Instructions for installing and using this package
 Assuming that you have ROS Kinetic installed already, do the following:
