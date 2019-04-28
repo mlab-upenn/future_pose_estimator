@@ -36,13 +36,13 @@ You will also want to print your own AprilTag. You can do this with the id0 pdf 
 # Description of package files
 These are the descriptions of the folders in this future_pose_predictor package:
 
-/config
+### /config
 - Contains camera calibrations for the Logitech C910 webcam at various resolutions. The one that is used in the launch files of this package is the logitech_c910_calibration_640x480.yaml file. 
 - Also contains rviz_custom.rviz, which is a custom Rviz configuration which showcases the map, laser scans, image raw, AprilTag processed image raw, and much more.
 - settings.yaml is a modified version of a file from the apriltags2_ros package. This is an input parameter to the apriltags2_ros package in the launch file. Here I have told apriltags2_ros to only look for tag36h11 family, which is the default family for AprilTag. I have also asked apriltags2_ros to publish the transform from the camera to the tag. I have not changed the remaining parameters.
 - tags.yaml contains the list of April Tags that should be recognized. Here I have only specified that one tag be identified, which is tag with id 0. I made this conscious decision because I am assuming a race with only 2 cars, and that we only need to detect the specific tag on the back of the car in front. Note that this file also needs to specify the size of the tag, which is 0.1085 meters. If you print your AprilTag at different sizes, you can. Just make sure to update this file. This file is specified as a parameter for launching apriltags2_ros in the launch files in the /launch folder.
 
-/launch
+### /launch
 - detect_apriltags.launch opens Rviz and shows the detected AprilTag, as well as the transform from the camera to the AprilTag.
 ![screenshot of detect_apriltags.launch](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/detect-apriltag-launch.png "Screenshot of detect_apriltags.launch")
 This screenshot above represents what you would see when running "roslaunch future_pose_predictor detect_apriltags.launch" in the terminal. On the right, you see an Rviz window. The large window on the right represents the transform from the camera to the id_0 AprilTag. On the left, notice Raw Image window (the image on top) which is taken in the mLab and shows the id_0 AprilTag on the left side. Below that, the ProcessedImage is the same image but with highlighted boxes around the AprilTag. On the far left of the screenshot, notice a stream of xyz AprilTag predicted positions and yaw. AprilTag originally outputs the xyz and quaternion, but because we are dealing with F1/10 cars which lie in a 2D plane, we only need the yaw. Looking at the most recent output on the bottom of the terminal window, the apriltags2_ros library computes that the AprilTag is 0.165 meters to the left, 0.173 meters down, and 0.982 meters in front. It also predicts that the yaw of the tag relative to the camera is 0.466 degrees. I then measured the actual distance and yaw angle. Here is what I saw:
@@ -57,8 +57,27 @@ yaw (degrees) | 0.466 degrees | ~1 degree | 53.4%
 - bag_future_pose_estimation.launch runs the near future pose estimation algorithm on a bag file. The bag file contains the laser scan, image raw stream, camera calibration, and vesc odometry which is used by the particle filter. Note that once the bag file starts playing, it takes around 5 seconds for apriltags2_ros to begin publishing transform messages, so you will want to press the space bar in the terminal to pause the bag file for a few seconds, so that the particle filter does not lose its localization. Here is a video of what you will see when you run this launch file: https://www.youtube.com/watch?v=HVJxHHeB9qo. 
 - future_pose_estimation.launch is nearly identical to bag_future_pose_estimation.launch. The main difference is that instead of playing back from a bag file, the launch file activates racecar teleop.launch which allows the car to be driven live. When you are driving the car live, you may want to see what the car is seeing, with which you can set up VNC. Instructions are in this reference guide which I co-wrote: http://f1tenth.org/build.html#settingupvncserveronjetson. 
 
+### /maps
+- Contains the map for Levine Hall 2nd floor, which represents a loop around the mLab. ROS standard is to contain both a .pgm file and a .yaml file, which specifies how the .pgm pixels correspond to actual distances in meters. I created this map using an architectural floor plan of the building, and I drew it in Photoshop.
+
+### /src
+- Contains many Python files which do various tasks.
+- future_pose_estimator.py is the file which contains the main algorithm. It subscribes to the AprilTag published transform and also uses the set of waypoints, in order to predict where the car will be in the near future. It publishes a MarkerArray which contains 10 Markers, which represents predictions for the car in the future in 0.10 second increments.
+- front_car_pose_saver.py is used to save the "actual" locations of the car in front as a csv of waypoints.
+- predicted_poses_saver.py is used to save the MarkerArray locations of the predictions of the car in front as a csv of waypoints.
+- quaternion_to_yaw.py is used by detect_apriltags.launch in order to output to the terminal screen the xyz position and yaw of the detected AprilTag.
+- visualize_actual_poses.py is used to plot in Rviz as a MarkerArray the entire sequence of actual poses of the car in front over an entire loop.
+- visualize_markers.py is used to plot the waypoints.csv file which is an estimate of the general path that any car would take in the race track.
+- visualize_predicted_poses.py is used to visualize the predicted poses in Rviz as a MarkerArray the entire sequence of predicted poses of the car in front over an entire loop.
+
+### /waypoints
+- levine-waypoints.csv (yellow in Rviz) is the set of waypoints plotted in Rviz representing generally the path a car would take if it followed almost dead center between the walls around the race course.
+- actual-poses.csv is a set of waypoints plotted in Rviz representing actual poses of the car in front
+- predicted_poses.csv is a set of waypoints plotte din Rviz representing predicted poses of the car in front
+
 # Experimental Results
 ### Experiment 1. Accuracy of raw AprilTag measurements
+![Measuring distances in mLab](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/L1010251.jpg "Measuring distances in mLab")
 
 ### Experiment 2. Accuracy of near future pose predictions
 (insert image of car going in the circle), need to explain what each color means. 
