@@ -22,7 +22,7 @@
   <!-- LAUNCHES RVIZ -->
   <node type="rviz" name="rviz" pkg="rviz" args="-d $(find future_pose_predictor)/config/rviz_custom.rviz" />
 
-  <node pkg="rosbag" type="play" name="player" args="--clock -d 5 /home/nvidia/Desktop/two-cars-levine-loop.bag"/>
+  <node pkg="rosbag" type="play" name="player" args="--clock -d 5 /home/nvidia/Desktop/two-cars-levine-loop-bad-lots-of-stops.bag"/>
 
   <node pkg="tf2_ros" type="static_transform_publisher" name="laser_to_camera" args="0 0 0 -1.570796 0 -1.570796 laser camera " />
   <node pkg="tf2_ros" type="static_transform_publisher" name="id_0_to_other_base_link" args="0 0 0 1.570796 1.570796 0 id_0 other_base_link " />
@@ -112,8 +112,8 @@
   <!-- Lastly, will also want to run Python files for my own written nodes. -->
   <node pkg="future_pose_predictor" name="future_pose_estimator_node" type="future_pose_estimator.py" output="screen" />
 <!--  <node pkg="apriltags2_ros" name="predicted_poses_saver" type="predicted_poses_saver.py" output="screen"/>-->
-<!--  <node pkg="future_pose_predictor" name="visualize_markers_node" type="visualize_markers.py" output="screen"/>-->
-<!--  <node pkg="future_pose_predictor" name="visualize_predicted_poses_node" type="visualize_predicted_poses.py" output="screen"/>-->
-<!--  <node pkg="future_pose_predictor" name="visualize_actual_poses_node" type="visualize_actual_poses.py" output="screen"/>-->
+  <node pkg="future_pose_predictor" name="visualize_markers_node" type="visualize_markers.py" output="screen"/>
+  <node pkg="future_pose_predictor" name="visualize_predicted_poses_node" type="visualize_predicted_poses.py" output="screen"/>
+  <node pkg="future_pose_predictor" name="visualize_actual_poses_node" type="visualize_actual_poses.py" output="screen"/>
 
 </launch>
