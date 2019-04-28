@@ -46,11 +46,16 @@ These are the descriptions of the folders in this future_pose_predictor package:
 ![screenshot of detect_apriltags.launch](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/detect-apriltag-launch.png "Screenshot of detect_apriltags.launch")
 This screenshot above represents what you would see when running "roslaunch future_pose_predictor detect_apriltags.launch" in the terminal. On the right, you see an Rviz window. The large window on the right represents the transform from the camera to the id_0 AprilTag. On the left, notice Raw Image window (the image on top) which is taken in the mLab and shows the id_0 AprilTag on the left side. Below that, the ProcessedImage is the same image but with highlighted boxes around the AprilTag. On the far left of the screenshot, notice a stream of xyz AprilTag predicted positions and yaw. AprilTag originally outputs the xyz and quaternion, but because we are dealing with F1/10 cars which lie in a 2D plane, we only need the yaw. Looking at the most recent output on the bottom of the terminal window, the apriltags2_ros library computes that the AprilTag is 0.165 meters to the left, 0.173 meters down, and 0.982 meters in front. It also predicts that the yaw of the tag relative to the camera is 0.466 degrees. I then measured the actual distance and yaw angle. Here is what I saw:
 ![measurement of actual AprilTag distance](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/L1010427.jpg "measurement of actual AprilTag distance")
-| Measurement | Predicted Measurement | Actual Measurement | Error |
-| ----------- |:---------------------:| ------------------:| -----:|
-| z-axis (front) | 0.982 meters | .940 meters |4.28% |
-| x-axis (left) | 0.173 meters | 0.206 meters |16.0% |
-| yaw (degrees) | 0.466 degrees | 1 degree |53.4% |
+Measurement | Predicted Measurement | Actual Measurement | Error
+----------- | --------------------- | ------------------ | -----
+z-axis (front) | 0.982 meters | .940 meters |4.28%
+x-axis (left) | 0.173 meters | 0.206 meters |16.0%
+yaw (degrees) | 0.466 degrees | 1 degree |53.4%
+
+Measurement | Predicted Measurement | Actual Measurement | Error
+----------- | --------------------- | ------------------ | -----
+1 | 2 | 3 | 4
+
 - Notice that this isn't perfect. 
 
 # Details on hardware setup on F1/10 car
