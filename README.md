@@ -22,9 +22,10 @@ This image above showcases the hardware on the F1/10 car. Going from left to rig
 Assuming that you have ROS Kinetic installed already, do the following:
 1. Git clone the mlab-upenn/f110-upenn-course repository (which I was one of the co-contributors for): https://github.com/mlab-upenn/f110-upenn-course 
 2. Follow the README instructions in the f110-upenn-course repository to install the required ROS package dependencies.
-3. This package requires the apriltag_ros repository which is located here: https://github.com/AprilRobotics/apriltag_ros. Git clone this into the /algorithms folder which you will see inside the f110-upenn-course repository which you have cloned.
-4. Then, git clone *this repository* into the /algorithms folder. You should now see a folder called /future_pose_estimator. 
-5. You will then need to sudo apt-get a few packages that this package depends on for usb cam images.
+3. This repository requires the particle filter from MIT-racecar, instructions to install are here: https://github.com/mlab-upenn/f110-upenn-course/tree/master/algorithms/particle_filter. 
+4. This package requires the apriltag_ros repository which is located here: https://github.com/AprilRobotics/apriltag_ros. Git clone this into the /algorithms folder which you will see inside the f110-upenn-course repository which you have cloned.
+5. Then, git clone *this repository* into the /algorithms folder. You should now see a folder called /future_pose_estimator. 
+6. You will then need to sudo apt-get a few packages that this package depends on for usb cam images.
 
 sudo apt-get install ros-kinetic-usb-cam ros-kinetic-camera-calibration
 
@@ -49,17 +50,25 @@ This screenshot above represents what you would see when running "roslaunch futu
 
 Measurement | Predicted Measurement | Actual Measurement | Error
 ----------- | --------------------- | ------------------ | -------
-z-axis (front) | 0.982 meters | .940 meters | 4.28%
+z-axis (front) | 0.982 meters | 0.940 meters | 4.28%
 x-axis (left) | 0.173 meters | 0.206 meters | 16.0%
-yaw (degrees) | 0.466 degrees | 1 degree | 53.4%
+yaw (degrees) | 0.466 degrees | ~1 degree | 53.4%
 
-- Notice that this isn't perfect. 
+- bag_future_pose_estimation.launch runs the near future pose estimation algorithm on a bag file. The bag file contains the laser scan, image raw stream, camera calibration, and vesc odometry which is used by the particle filter. Note that once the bag file starts playing, it takes around 5 seconds for apriltags2_ros to begin publishing transform messages, so you will want to press the space bar in the terminal to pause the bag file for a few seconds, so that the particle filter does not lose its localization. Here is a video of what you will see when you run this launch file: https://www.youtube.com/watch?v=HVJxHHeB9qo. 
+- future_pose_estimation.launch is nearly identical to bag_future_pose_estimation.launch. The main difference is that instead of playing back from a bag file, the launch file activates racecar teleop.launch which allows the car to be driven live. When you are driving the car live, you may want to see what the car is seeing, with which you can set up VNC. Instructions are in this reference guide which I co-wrote: http://f1tenth.org/build.html#settingupvncserveronjetson. 
 
-# Details on hardware setup on F1/10 car
-(Here can insert an image of the car setup, from one of the images from yesterday or from before)
+# Experimental Results
+### Experiment 1. Accuracy of raw AprilTag measurements
 
+### Experiment 2. Accuracy of near future pose predictions
+(insert image of car going in the circle), need to explain what each color means. 
 
 # Description of algorithm
+Please reference the full paper I have written which is included in this repository. 
+TODO: When I am done with the paper, include the pdf and .docx versions of it in the Github repository.
+
+# Special Thanks
+Thank you to Professor Mangharam and Professor Taylor for advising me on my senior thesis. I spent summer of 2018 learning about F1/10 cars for the first time, while developing a new ESE 680 course on autonomous racing which I assistant taught in fall of 2018. Then in spring of 2019 I worked on this project.
 
 
 
