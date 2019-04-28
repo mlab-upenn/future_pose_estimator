@@ -49,6 +49,7 @@ This screenshot above represents what you would see when running "roslaunch futu
 Measurement | Predicted Measurement | Actual Measurement | Error
 ----------- | --------------------- | ------------------ | -------
 1 | 2 | 3 | 4
+
 z axis | 0.982 meters | 0.940 meters | 4.28
 
 
