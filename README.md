@@ -9,6 +9,8 @@ Specifically, this package returns the estimated pose of a car 1 second in the f
 * image_raw images coming from a USB webcam facilitated by the ROS usb_cam node
 * a set of waypoints that represents the general path that the car is expected to take around the race track map
 
+![two cars in hallway](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/L1000398.jpg "Two F1/10 cars in the Levine 2nd floor hallway outside the mLab")
+
 # Instructions for installing and using this package
 Assuming that you have ROS Kinetic installed already, do the following:
 1. Git clone the mlab-upenn/f110-upenn-course repository (which I was one of the co-contributors for): https://github.com/mlab-upenn/f110-upenn-course 
