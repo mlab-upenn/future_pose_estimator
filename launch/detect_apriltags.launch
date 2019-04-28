@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- ARGUMENTS -->
+  <arg name="launch_prefix" default="" />
+  <arg name="node_namespace" default="apriltags2_ros_continuous_node" />
+  <arg name="camera_name" default="/usb_cam" />
+  <arg name="camera_frame" default="camera" />
+  <arg name="image_topic" default="image_raw" />
+
+  <!-- LAUNCH RACECAR TELEOP -->
+  <!-- <include file="$(find racecar)/launch/teleop.launch"/> -->
+
+  <!-- LAUNCHES RVIZ -->
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find future_pose_predictor)/config/rviz_custom.rviz" />
+
+  <!-- STATIC CAMERA TRANSFORM -->
+  <node pkg="tf" type="static_transform_publisher" name="usb_cam_tf" args="0 0 0 3.141593 -3.141593 -1.570796 camera map 100" />
+
+  <!-- LAUNCHES USB_CAM -->
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video0" />
+    <param name="camera_info_url" value="package://future_pose_predictor/config/logitech_c910_calibration_640x480.yaml" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="$(arg camera_frame)" />
+    <param name="io_method" value="mmap"/>
+    <param name="auto_focus" type="bool" value="true" />
+    <param name="framerate" value="30" />
+  </node>
+
+  <!-- LAUNCHES APRILTAGS2 -->
+  <!-- Set parameters -->
+  <rosparam command="load" file="$(find future_pose_predictor)/config/settings.yaml" ns="$(arg node_namespace)" />
+  <rosparam command="load" file="$(find future_pose_predictor)/config/tags.yaml" ns="$(arg node_namespace)" />
+  
+  <node pkg="apriltags2_ros" type="apriltags2_ros_continuous_node" name="$(arg node_namespace)" clear_params="true" output="screen" launch-prefix="$(arg launch_prefix)" >
+    <!-- Remap topics from those used in code to those on the ROS network -->
+    <remap from="image_rect" to="$(arg camera_name)/$(arg image_topic)" />
+    <remap from="camera_info" to="$(arg camera_name)/camera_info" />
+
+    <param name="camera_frame" type="str" value="$(arg camera_frame)" />
+    <param name="publish_tag_detections_image" type="bool" value="true" />
+    <param name="publish_tf" type="bool" value="true" />
+  </node>
+
+  <node pkg="future_pose_predictor" name="quaternion_to_yaw_node" type="quaternion_to_yaw.py" output="screen"/>
+</launch>
