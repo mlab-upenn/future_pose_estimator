@@ -30,7 +30,17 @@ sudo apt-get install ros-kinetic-usb-cam ros-kinetic-camera-calibration
 
 At this point, navigate to the root of your workspace (ws) ROS directory, and type catkin_make. This may take a few minutes to build. If you see any errors, there may be other ROS packages that you need to install. The error messages will give you hints as to what you need to install. The command to install will be of the form sudo apt-get install ros-kinetic-[insert package name with hyphens]
 
+You will also want to print your own AprilTag. You can do this with the id0 pdf AprilTag found in the /apriltag-printout folder in this repository.
+
 # Description of package files
+These are the descriptions of the folders in this future_pose_predictor package:
+
+/config
+- Contains camera calibrations for the Logitech C910 webcam at various resolutions. The one that is used in the launch files of this package is the logitech_c910_calibration_640x480.yaml file. 
+- Also contains rviz_custom.rviz, which is a custom Rviz configuration which showcases the map, laser scans, image raw, AprilTag processed image raw, and much more.
+- settings.yaml is a modified version of a file from the apriltags2_ros package. This is an input parameter to the apriltags2_ros package in the launch file. Here I have told apriltags2_ros to only look for tag36h11 family, which is the default family for April Tags. I have also asked apriltags2_ros to publish the transform from the camera to the tag. I have not changed the remaining parameters.
+- tags.yaml contains the list of April Tags that should be recognized. Here I have only specified that one tag be identified, which is tag with id 0. I made this conscious decision because I am assuming a race with only 2 cars, and that we only need to detect the specific tag on the back of the car in front. Note that this file also needs to specify the size of the tag, which is 0.1085 meters. If you print your AprilTag at different sizes, you can. Just make sure to update this file. This file is specified as a parameter for launching apriltags2_ros in the launch files in the /launch folder.
+
 
 
 # Details on hardware setup on F1/10 car
