@@ -1,5 +1,5 @@
 # future_pose_estimator ROS Package
-ROS package that predicts near future pose (up to 1 second) for F1/10th car in front using an April Tag. Written by Christopher Kao for EAS 499 engineering senior thesis.
+ROS package that predicts near future pose (up to 1 second) for F1/10th car in front using an April Tag. Written by Christopher Kao for EAS 499 engineering senior thesis in Spring 2019. Advised by Professor Rahul Mangharam and Professor Camillo J. Taylor.
 
 # Summary
 The goal of this ROS package is to reliably predict the near future pose of a F1/10 car that is in front of our F1/10 car. 
@@ -38,10 +38,20 @@ These are the descriptions of the folders in this future_pose_predictor package:
 /config
 - Contains camera calibrations for the Logitech C910 webcam at various resolutions. The one that is used in the launch files of this package is the logitech_c910_calibration_640x480.yaml file. 
 - Also contains rviz_custom.rviz, which is a custom Rviz configuration which showcases the map, laser scans, image raw, AprilTag processed image raw, and much more.
-- settings.yaml is a modified version of a file from the apriltags2_ros package. This is an input parameter to the apriltags2_ros package in the launch file. Here I have told apriltags2_ros to only look for tag36h11 family, which is the default family for April Tags. I have also asked apriltags2_ros to publish the transform from the camera to the tag. I have not changed the remaining parameters.
+- settings.yaml is a modified version of a file from the apriltags2_ros package. This is an input parameter to the apriltags2_ros package in the launch file. Here I have told apriltags2_ros to only look for tag36h11 family, which is the default family for AprilTag. I have also asked apriltags2_ros to publish the transform from the camera to the tag. I have not changed the remaining parameters.
 - tags.yaml contains the list of April Tags that should be recognized. Here I have only specified that one tag be identified, which is tag with id 0. I made this conscious decision because I am assuming a race with only 2 cars, and that we only need to detect the specific tag on the back of the car in front. Note that this file also needs to specify the size of the tag, which is 0.1085 meters. If you print your AprilTag at different sizes, you can. Just make sure to update this file. This file is specified as a parameter for launching apriltags2_ros in the launch files in the /launch folder.
 
-
+/launch
+- detect_apriltags.launch opens Rviz and shows the detected AprilTag, as well as the transform from the camera to the AprilTag.
+![screenshot of detect_apriltags.launch](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/detect-apriltag-launch.png "Screenshot of detect_apriltags.launch")
+This screenshot above represents what you would see when running "roslaunch future_pose_predictor detect_apriltags.launch" in the terminal. On the right, you see an Rviz window. The large window on the right represents the transform from the camera to the id_0 AprilTag. On the left, notice Raw Image window (the image on top) which is taken in the mLab and shows the id_0 AprilTag on the left side. Below that, the ProcessedImage is the same image but with highlighted boxes around the AprilTag. On the far left of the screenshot, notice a stream of xyz AprilTag predicted positions and yaw. AprilTag originally outputs the xyz and quaternion, but because we are dealing with F1/10 cars which lie in a 2D plane, we only need the yaw. Looking at the most recent output on the bottom of the terminal window, the apriltags2_ros library computes that the AprilTag is 0.165 meters to the left, 0.173 meters down, and 0.982 meters in front. It also predicts that the yaw of the tag relative to the camera is 0.466 degrees. I then measured the actual distance and yaw angle. Here is what I saw:
+![measurement of actual AprilTag distance](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/L1010427.jpg "measurement of actual AprilTag distance")
+| Measurement | Predicted Measurement | Actual Measurement | Error |
+| ----------- | --------------------- | ------------------ | ----- |
+| z-axis (front) | 0.982 meters | .940 meters | |
+| x-axis (left) | 0.173 meters | 0.206 meters | |
+| yaw (degrees) | 0.466 degrees | 1 degree | |
+- Notice that this isn't perfect. 
 
 # Details on hardware setup on F1/10 car
 (Here can insert an image of the car setup, from one of the images from yesterday or from before)
