@@ -1,6 +1,9 @@
 # future_pose_estimator ROS Package
 ROS package that predicts near future pose (up to 1 second) for F1/10th car in front using an April Tag. Written by Christopher Kao for EAS 499 engineering senior thesis in Spring 2019. Advised by Professor Rahul Mangharam and Professor Camillo J. Taylor.
 
+Want a quick overview? Watch this video showcasing the results: https://www.youtube.com/watch?v=uQ1Bp-Bjlzk.
+[![Overview Video](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/actual-versus-predicted-path-3.png "Overview Video")](https://www.youtube.com/watch?v=uQ1Bp-Bjlzk)
+
 # Summary
 The goal of this ROS package is to reliably predict the near future pose of a F1/10 car that is in front of our F1/10 car. 
 Specifically, this package returns the estimated pose of a car 1 second in the future. It provides 10 predictions: for 0.1 second in the future, 0.2 seconds, ..., up to 1.0 seconds in the future. The algorithm used by this package requires a number of pieces of information in order to work correctly.
