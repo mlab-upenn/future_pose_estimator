@@ -192,12 +192,21 @@ Case | Result
 10 | Inaccurate
 
 # Description of algorithm
-Please reference the full paper I have written which is included in this repository. 
+In general, the algorithm is a weighted average between a linear model and a pure pursuit model. The linear model takes into account the car's current yaw (orientation) and position, and projects it forward in a straight line. The pure pursuit model predicts that the car will generally follow the set of yellow waypoints. From 0 to 1 second into the future, in the immediate short term (think 0.1-0.4 seconds), more weight is placed on the linear model. As projected future time increases, more weight is placed on the pure pursuit model. The logic here is that in the immediate future, the car cannot do much to change its inertia and orientation. But further in the near future, the car will generally follow the direction of the track. 
+
+Here is the math equation:
+![Algorithm weighted average math equation](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/algorithm-math-equation.png "Algorithm weighted average math equation")
+
+For additional details and the thought process behind this algorithm, please reference the full paper I have written which is included in this repository. 
 TODO: When I am done with the paper, include the pdf and .docx versions of it in the Github repository.
 
 # How to test on different maps/tracks
+Chances are that if you are running this code, you won't be in the same location and will have a different track to run on. If you want to run the code as is with minimal configuration, you can run from the bag file by doing "roslaunch future_pose_prediction bag_future_pose_estimation.launch". If you would like to use your own set of waypoints and map, here is where you would change them.
+1. In the /maps folder, add your own map.
+2. In the /waypoints folder, add in your set of waypoints. You can record a set of waypoints while driving your car around your map and using particle filter localization using the waypoint_saver package inside of the f110-upenn-course repository which is linked near the top of this README.
+3. In the /launch folder, modify the launch file so that you specify the updated map name and the initial pose for the car within the map. 
 
-# Room for Improvement
+# Opportunities for Improvement
 - Talk about some opportunities for improvement for the algorithm.
 - Summarize the current flaws with the algorithm.
 - will want to be able to see AprilTag when next to the car. bag files were recorded with one car behind. Describe how this might be done. 
