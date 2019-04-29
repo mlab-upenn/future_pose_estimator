@@ -206,10 +206,20 @@ Chances are that if you are running this code, you won't be in the same location
 2. In the /waypoints folder, add in your set of waypoints. You can record a set of waypoints while driving your car around your map and using particle filter localization using the waypoint_saver package inside of the f110-upenn-course repository which is linked near the top of this README.
 3. In the /launch folder, modify the launch file so that you specify the updated map name and the initial pose for the car within the map. 
 
+# How to set up a different USB webcam
+Chances are that you do not have the exact same USB webcam I have which is the Logitech C910. (If you do, hey cheers to you!) Follow instructions from the ROS camera_calibration package: http://wiki.ros.org/camera_calibration. 
+1. You will need to print out a checkerboard pattern, which is linked on the page.
+2. Mount the checkerboard pattern on a piece of cardboard or equivalently flat, hard surface.
+3. Run the command described on the website that starts with "rosrun camera_calibration cameracalibrator.py ..." and do the calibration process.
+4. You will see a screen that looks like this:
+![Camera calibration](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/camera-calibration.jpg "Camera calibration")
+5. Once calibration is complete, find the .yaml file for the calibration and copy it into the /config folder from this repository. 
+6. You will need to modify the launch files in the /launch folder such that they load your calibration file and also so that the resolution matches your camera. 
+
 # Opportunities for Improvement
-- Talk about some opportunities for improvement for the algorithm.
-- Summarize the current flaws with the algorithm.
-- will want to be able to see AprilTag when next to the car. bag files were recorded with one car behind. Describe how this might be done. 
+1. As you can see with the results above, in around half the cases the algorithm inaccurately predicts the near future pose of the car. The case I see with most inaccurate predictions is when a car goes into a left turn, but ends up turning later. The algorithm predicts that the car begins turning a bit earlier than if it were staying in the center of the track. How might we be able to have an algorithm that predicts that the car makes wider turns? Perhaps playing with the lookahead distance, specifically by setting a shorter lookahead distance for the pure pursuit component of the algorithm, may address this problem. Or you may need to just rethink the algorithm, so that it considers what the car did in the past. Currently the algorithm does not consider past behavior of the car.
+2. Often times the AprilTag falls out of the frame of view of the camera. Currently my Logitech C910 is set to record at 640x480, which is not a widescreen resolution. This is a 1.33 aspect ratio, whereas typical HD formats like 720p and 1080p are 1.77 aspect ratios. Hence, with the current 640x480 resolution, the AprilTag will fall out of frame when the AprilTag moves too far to the left or right. I did try using 720p, but the problem was that the AprilTag rate was only 4Hz which was unusable, compared to 12Hz from 640x480. I did also try other 1.77 aspect ratios of lower resolution such as 850x480, but any resolution besides 640x480 led to entirely incomprehensible images that were a bunch of random horizontal lines. I think that the resolution is locked at the physical level. When looking at the Logitech C910 website specs, it does list 640x480 as one of the native resolutions. It would be helpful to get some type of webcam that can support lower resolution at wide aspect ratio.
+3. What happens if our car begins to pass the other car from the side? Then clearly the AprilTag will fall out of field of view. This is arguably the most important aspect of passing where we need to know the other car is. How might this be solved? Could we mount 2 different USB webcams? Do we mount 3 AprilTags on the car in front? One on its rear, and one on each side? Each AprilTag would have a different id and we would hard code the locations of each id relative to that car. Is it even possible to use a 180 degree or 360 degree camera? And process the image in equirectangular format?
 
 # Special Thanks
 Thank you to Professor Mangharam and Professor Taylor for advising me on my senior thesis. I spent summer of 2018 learning about F1/10 cars for the first time, while developing a new ESE 680 course on autonomous racing which I assistant taught in fall of 2018. Then in spring of 2019 I worked on this project.
