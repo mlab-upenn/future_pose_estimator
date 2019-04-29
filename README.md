@@ -222,7 +222,9 @@ Chances are that you do not have the exact same USB webcam I have which is the L
 3. What happens if our car begins to pass the other car from the side? Then clearly the AprilTag will fall out of field of view. This is arguably the most important aspect of passing where we need to know the other car is. How might this be solved? Could we mount 2 different USB webcams? Do we mount 3 AprilTags on the car in front? One on its rear, and one on each side? Each AprilTag would have a different id and we would hard code the locations of each id relative to that car. Is it even possible to use a 180 degree or 360 degree camera? And process the image in equirectangular format?
 
 # Special Thanks
-Thank you to Professor Mangharam and Professor Taylor for advising me on my senior thesis. I spent summer of 2018 learning about F1/10 cars for the first time, while developing a new ESE 680 course on autonomous racing which I assistant taught in fall of 2018. Then in spring of 2019 I worked on this project.
+Thank you to Professor Mangharam and Professor Taylor for advising me on my senior thesis. Also thank you to Matt O'Kelly for providing insight into the weighted averaging algorithm used, and for his many calls and Slack messages and in-person meetings since last summer with answering my F1/10 questions. 
+
+I spent summer of 2018 learning about F1/10 cars for the first time, while developing a new ESE 680 course on autonomous racing which I assistant taught in fall of 2018. Then in spring of 2019 I worked on this project.
 
 
 
