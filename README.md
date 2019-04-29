@@ -148,9 +148,59 @@ Here, the car is approaching a left turn. If you watch the video linked above, y
 ![Car making left turn later than expected](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/actual-versus-predicted-path-4.png "Car making left turn later than expected")
 Here, the car finally makes a left turn, later than expected. Notice the trail of red paths from earlier predicting that the car would make a left, when instead the car continued moving straight. When the car finally does make the left turn, the AprilTag later falls out of frame, which is why there is a discontinuity in the blue dots, which represents where the car actual went. 
 
+#### Case 4. Car going down straightaway
+![Car going down straightaway in center](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/actual-versus-predicted-path-5.png "Car going down straightaway in center")
+Here the car is moving from top to bottom of the image. other_base_link represents the car that we are predicting the future pose of. Notice that the green dots overlap the blue dots pretty well. This is a good thing. Because the car is generally in the center of the track, the algorithm predicts that it will follow the yellow dots (the waypoints which I generated to track the center of the race track). Notice also that as the blue dots oscillate slightly from right of center to left of center, the red dots also track this general motion. This is due to my algorithm taking into account the current yaw of the car and using a linear model that projects forward the car's current motion.
+
+#### Case 5. Car initiating a left turn
+![Car initiating a left turn](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/actual-versus-predicted-path-7.png "Car initiating a left turn")
+Here the car is initiating a left turn. The predicted trajectory at this point (in green) does not overlap with the actual future path of the car (in blue). Instead, the car continues straight for a bit more and makes a wider left turn. With future time steps, however, the algorithm adjusts and eventually predicts the correct trajectory. There is a chance that the car in front may have been trying to make a left earlier, but because of dynamics of the car such as drift, the car ended up making a wider turn. It is also possible that due to the roughly 0.4 second delay of the AprilTag, as was quantitatively measured in Experiment 2, perhaps the car is actually further ahead, and hence it is tracking the blue dots. I tried to analyze the videos, but because it is a 2D image with the car far away, it is difficult to judge the depth of the car. More analysis can be done on this in future work, for those who continue this project.
+
+#### Case 6. Car makes left turn late
+![Car makes left turn late](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/actual-versus-predicted-path-9.png "Car makes left turn late")
+It turns out that the car makes the left turn pretty late. Here, the prediction is accurate. The green dots follow the blue dots. Although we can't see the blue dots continuously here (because the car's AprilTag quickly falls out of frame of the camera), it's clear that the green predicted pose tracks the blue actual pose. Note that if we were using a simpler algorithm in this case, such as a linear model which just projects forward the car's current orientation, the resulting predicted pose would have been a straight line through the right wall. 
+
+#### Case 7. Car going straight
+![Car going straight](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/actual-versus-predicted-path-10.png "Car going straight")
+This looks pretty accurate. Blue dots overlap with red dots.
+
+#### Case 8. Car making third left in the map
+![Car making third left in the map](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/actual-versus-predicted-path-11.png "Car making third left in the map")
+This left turn looks pretty accurate. The blue dots track the red dots. Notice that there are elements earlier though where red dots predicts that the car should turn earlier, but the car did not turn that early. 
+
+#### Case 9. Car veering back towards center from right
+![Car veering back towards center from right](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/actual-versus-predicted-path-12.png "Car veering back towards center from right")
+Here the car is accurately predicting that it will veer back towards the center. 
+
+#### Case 10. 
+![Car predicts that it goes into the wall???](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/actual-versus-predicted-path-14.png "Car predicts that it goes into the wall???")
+The green dots here indicate the algorithm predicts that the car will go into the wall? You must be wondering what is going on here. This is an edge case. Because my algorith uses pure pursuit as part of its weighting process, and because pure pursuit thinks that the closest yellow point is the one behind the car (as opposed to the one in front of the car), the car attempts a hard right turn in order to loop back to the point behind it. This is only a momentary problem, because as soon as the car advances forward another few centimeters, it picks up the point in front and makes an accurate prediction. I thought it would be important to explain this edge case here for the accute readers who picked this up.
+
+To summarize Experiment 3, here is a table of which results were good (predicted path tracked actual path) and which were bad (predicted path did not track actual path).
+
+Case | Result
+---- | ------
+1 | Inaccurate
+2 | Inaccurate
+3 | Inaccurate
+4 | Accurate
+5 | Inaccurate
+6 | Accurate
+7 | Accurate
+8 | Accurate
+9 | Accurate
+10 | Inaccurate
+
 # Description of algorithm
 Please reference the full paper I have written which is included in this repository. 
 TODO: When I am done with the paper, include the pdf and .docx versions of it in the Github repository.
+
+# How to test on different maps/tracks
+
+# Room for Improvement
+- Talk about some opportunities for improvement for the algorithm.
+- Summarize the current flaws with the algorithm.
+- will want to be able to see AprilTag when next to the car. bag files were recorded with one car behind. Describe how this might be done. 
 
 # Special Thanks
 Thank you to Professor Mangharam and Professor Taylor for advising me on my senior thesis. I spent summer of 2018 learning about F1/10 cars for the first time, while developing a new ESE 680 course on autonomous racing which I assistant taught in fall of 2018. Then in spring of 2019 I worked on this project.
