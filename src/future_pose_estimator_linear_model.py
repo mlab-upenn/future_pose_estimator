@@ -12,7 +12,9 @@ br = tf.TransformBroadcaster()
 # Global variable for prev_pose
 prev_pose = Pose()
 has_prev_pose = True # flag so that we know whether there was a previous pose
-HERTZ = 4 # apriltags2_ros is giving us pose estimates at around 4 times per second for 1280 x 720 resolution.
+HERTZ = 12 # apriltags2_ros is giving us pose estimates at around 12 times per second for 640 x 480 resolution.
+
+# This is the linear model approach, which looks at the leading car's current orientation (yaw), position, and velocity. It projects it forward at the current velocity in a linear fashion using sine and cosine of the yaw angle.
 
 # For simplicity, let's just assume for now that there is only one id. And that that id is id=0 from 36h11 April Tag class.
 
@@ -33,20 +35,16 @@ def callback(data):
 			position = pose.position
 			orientation = pose.orientation
 
-			# Approach #1. Linear (x, z) extrapolation approach is here.
+            # Linear model approach. Get the relative speed of the car and the orientation, and use that to predict its future pose.
+            # Orientation is given as x, y, z, w. How do we convert that into yaw? Don't care about pitch and roll.
 			delta_x = position.x - prev_pose.position.x # expressed in meters
 			delta_z = position.z - prev_pose.position.z
-			# Ignore y (up and down in camera's perspective) since we assume F1/10 cars are racing in a 2D plane
-			# predicted_x = position.x + delta_x * HERTZ
-			# predicted_z = position.z + delta_z * HERTZ
+
 			velocity = math.sqrt(delta_x * delta_x + delta_z * delta_z) * HERTZ # meters per second
 			if delta_z < 0:
 				velocity = velocity * -1
 			print("velocity: ", velocity)
 
-			# Approach #2. Get the relative speed of the car and the orientation, and use that to predict 
-			# its future pose. 
-			# Orientation is given as x, y, z, w. How do we convert that into yaw? Don't care about pitch and 			  roll.
 			quaternion = (
 				orientation.x,
 				orientation.y,

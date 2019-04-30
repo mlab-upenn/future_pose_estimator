@@ -11,8 +11,10 @@ from geometry_msgs.msg import PoseStamped
 from visualization_msgs.msg import Marker
 from visualization_msgs.msg import MarkerArray
 
-#home = expanduser('~')
-#file = open(strftime(home+'/rcws/logs/wp-%Y-%m-%d-%H-%M-%S',gmtime())+'.csv', 'w')
+# This node subscribes to the transform from /map to /other_base_link and
+# saves the (x, y) coordinates into a file called predicted_poses.csv.
+# This position is considered the "actual" position of the car in front.
+
 file = open("front_car_poses.csv", "w")
 
 def shutdown():

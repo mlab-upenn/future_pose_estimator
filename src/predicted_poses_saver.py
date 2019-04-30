@@ -11,8 +11,9 @@ from geometry_msgs.msg import PoseStamped
 from visualization_msgs.msg import Marker
 from visualization_msgs.msg import MarkerArray
 
-#home = expanduser('~')
-#file = open(strftime(home+'/rcws/logs/wp-%Y-%m-%d-%H-%M-%S',gmtime())+'.csv', 'w')
+# This node subscribes to the /future_pose topic which is published by future_pose_estimator.py and
+# saves the (x, y) coordinates into a file called predicted_poses.csv.
+
 file = open("predicted_poses.csv", "w")
 
 def save_waypoint(data):
@@ -21,22 +22,6 @@ def save_waypoint(data):
         y = marker.pose.position.y
 
         file.write('%f, %f, %f\n' % (x, y, 0))
-
-#    quaternion = np.array([data.pose.orientation.x, 
-#                           data.pose.orientation.y, 
-#                           data.pose.orientation.z, 
-#                           data.pose.orientation.w])
-
-#    euler = tf.transformations.euler_from_quaternion(quaternion)
-#    speed = LA.norm(np.array([data.twist.twist.linear.x, 
-#                              data.twist.twist.linear.y, 
-#                              data.twist.twist.linear.z]),2)
-
-#    file.write('%f, %f, %f, %f\n' % (data.pose.pose.position.x,
-#                                     data.pose.pose.position.y,
-#                                     euler[2],
-#                                     speed))
-    
 
 def shutdown():
     file.close()
