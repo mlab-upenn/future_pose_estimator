@@ -101,7 +101,7 @@ Actual Measurement | AprilTag Measurement | Error
 4.572 meters | could not detect tag | could not detect tag
 
 ### Experiment 2. Accuracy of raw AprilTag measurements while car is moving backward
-Video Link with sychronized dual videos: https://www.youtube.com/watch?v=HVJxHHeB9qo 
+Video Link with sychronized dual videos: https://www.youtube.com/watch?v=Qp6suG0r_1M
 Table below has values which are taken at equidistant steps, 10 frames apart, for 24fps videos. 
 
 Actual Measurement | AprilTag Measurement | Error
@@ -126,6 +126,30 @@ Actual Measurement | AprilTag Measurement | Error
 0.41 meters | 0.55 meters | 34.15% (stationary)
 
 The results here look a lot worse than I thought they would be. The error seems to grow larger as the car moves backwards closer to the camera. The reason is likely because of some type of delay in computing the AprilTag measurement, which results in a pretty constant difference in actual vs AprilTag measurement of around 0.15-0.20 meters. Here it seems like that the AprilTag is taking around 10 frames (at 24 frames per second) to process, hence if we were to move all the AprilTag measurements earlier by 10 frames, or 0.42 seconds, the measurements would line up. This graph is insightful because it shows us an AprilTag processing delay of around 0.42 seconds. I don't think there are any confounding variables with Experiment 1 because Experiments 1 and 2 share the same setup, and were recorded only minutes after each other. Another reason for the roughly 0.42 second delay is that the AprilTag is also processing at around 10Hz, around 0.1 seconds, so it may also take 0.1 seconds before getting the next AprilTag measurement. 
+
+Notice that if we shift the AprilTag measurements such that they are 10 frames earlier (0.42 seconds earlier), the error is in line with the results of Experiment 1 when the AprilTag was stationary.
+
+Actual Measurement | AprilTag Measurement (Shifted 10 frames earlier) | Error
+------------------ | ------------------ | -------
+3.20 meters | 3.27 meters | -2.19% (stationary)
+3.05 meters | 3.15 meters | -3.28% (begins moving backwards)
+2.90 meters | 3.03 meters | -4.48%
+2.74 meters | 2.84 meters | -3.65%
+2.64 meters | 2.74 meters | 3.79%
+2.57 meters | 2.62 meters | -1.95%
+2.39 meters | 2.47 meters | -3.35%
+2.24 meters | 2.31 meters | -3.13%
+2.08 meters | 2.08 meters | 0.00%
+1.88 meters | 1.92 meters | -2.13%
+1.70 meters | 1.75 meters | -2.94%
+1.57 meters | 1.59 meters | -1.27%
+1.42 meters | 1.35 meters | 4.92%
+1.14 meters | 1.11 meters | 2.63%
+0.94 meters | 0.91 meters | 3.19%
+0.74 meters | 0.68 meters | 8.11%
+0.56 meters | 0.55 meters | 1.79% (coming to a stop)
+
+Notice that here the error measurements are much more in line with the results of Experiment 1 when the AprilTag was stationary. This is evidence that the AprilTag measurements are indeed delayed by around 10 frames, or around 0.4 seconds. This delay could result from printing the AprilTag measurements in the terminal window, since it is known that Python print statements - especially when printing a lot of statements - slows down the code.
 
 ### Experiment 3. Accuracy of near future pose predictions
 ![Actual versus Predicted Path](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/actual-versus-predicted-path-0.png "Actual versus Predicted Path")
