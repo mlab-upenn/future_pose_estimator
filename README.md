@@ -57,7 +57,7 @@ Now the 2.03 GB size bag file should show up in a folder called /bags.
 You will also want to print your own AprilTag. You can do this with the id0 pdf AprilTag found in the /apriltag-printout folder in this repository.
 
 # Description of package files
-These are the descriptions of the folders in this future_pose_predictor package:
+These are the descriptions of the folders in this future_pose_predictor package. Here is a video that walks through the code and package structure: https://www.youtube.com/watch?v=SwMhvUBpBnY.
 
 ### /config
 - Contains camera calibrations for the Logitech C910 webcam at various resolutions. The one that is used in the launch files of this package is the logitech_c910_calibration_640x480.yaml file. 
