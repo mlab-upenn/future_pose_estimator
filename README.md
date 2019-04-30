@@ -34,6 +34,18 @@ sudo apt-get install ros-kinetic-usb-cam ros-kinetic-camera-calibration
 
 At this point, navigate to the root of your workspace (ws) ROS directory, and type catkin_make. This may take a few minutes to build. If you see any errors, there may be other ROS packages that you need to install. The error messages will give you hints as to what you need to install. The command to install will be of the form sudo apt-get install ros-kinetic-[insert package name with hyphens]
 
+# Downloading the Bag File
+I used Git LFS (Large File Storage) to host a 2GB bag file which is located in the /bags folder titled "two-cars-levine-loop-bad-lots-of-stops.bag". You may wonder why this title for the bag. I purposely chose to use the bag with lots of stops so that we can get more tests of edge cases as the car drives around the Levine 2nd floor loop. You will need to run the following commands in the repository to get this bag file. 
+
+First, install git-lfs from https://git-lfs.github.com. Then navigate to this repository on your computer.
+
+git lfs install
+git pull
+git lfs fetch
+
+Now the 2.03 GB size bag file should show up in a folder called /bags.
+
+# Printing your AprilTag
 You will also want to print your own AprilTag. You can do this with the id0 pdf AprilTag found in the /apriltag-printout folder in this repository.
 
 # Description of package files
