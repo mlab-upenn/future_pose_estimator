@@ -199,7 +199,7 @@ This left turn looks pretty accurate. The blue dots track the red dots. Notice t
 ![Car veering back towards center from right](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/actual-versus-predicted-path-12.png "Car veering back towards center from right")
 Here the car is accurately predicting that it will veer back towards the center. 
 
-#### Case 10. 
+#### Case 10. Edge case where car wants to loop around
 ![Car predicts that it goes into the wall???](https://github.com/mlab-upenn/future_pose_estimator/blob/master/photos/actual-versus-predicted-path-14.png "Car predicts that it goes into the wall???")
 The green dots here indicate the algorithm predicts that the car will go into the wall? You must be wondering what is going on here. This is an edge case. Because my algorith uses pure pursuit as part of its weighting process, and because pure pursuit thinks that the closest yellow point is the one behind the car (as opposed to the one in front of the car), the car attempts a hard right turn in order to loop back to the point behind it. This is only a momentary problem, because as soon as the car advances forward another few centimeters, it picks up the point in front and makes an accurate prediction. I thought it would be important to explain this edge case here for the accute readers who picked this up.
 
